@@ -1,13 +1,17 @@
+import os
 import logging
 import structlog
 from flask import Flask
 from flask_cors import CORS
+from alembic.config import Config
+from alembic import command
 from flask_migrate import Migrate, upgrade
 
 from config import get_config
 from app.extensions import db, migrate, redis_client
 from app.utils.database import check_and_create_database
 
+logger = structlog.get_logger(__name__)
 
 def setup_logging():
     """Configure structured logging."""
@@ -53,12 +57,49 @@ def create_app():
     # Check and create database if it doesn't exist
     check_and_create_database(app)
 
-    # Auto-apply migrations in development
-    if app.config.get('AUTO_MIGRATE', False):
-        with app.app_context():
+    # Migration handling
+    with app.app_context():
+        # Ensure models are imported
+        from app.models.task import Task
+
+        # Initialize migrations only once
+        migrations_dir = os.path.join(app.root_path, '..', 'migrations')
+        env_py_path = os.path.join(migrations_dir, 'env.py')
+
+        # Create migrations folder if needed
+        if not os.path.exists(migrations_dir):
+            os.makedirs(migrations_dir, exist_ok=True)
+
+        # Initialize migrations only if env.py doesn't exist
+        if not os.path.exists(env_py_path):
             try:
-                upgrade()
+                from flask_migrate import init
+                logger.info("Initializing migrations directory")
+                init(directory=migrations_dir)
             except Exception as e:
+                if "already exists" not in str(e):
+                    logger.error("Migrations init failed", error=str(e))
+                    raise
+
+        # Generate initial migration if needed
+        versions_dir = os.path.join(migrations_dir, 'versions')
+        if not os.path.exists(versions_dir) or not os.listdir(versions_dir):
+            try:
+                from flask_migrate import migrate
+                logger.info("Generating initial migration")
+                migrate(directory=migrations_dir, message='Initial migration')
+            except Exception as e:
+                logger.error("Migration generation failed", error=str(e))
+                raise
+
+        # Apply migrations
+        if app.config.get('AUTO_MIGRATE', False):
+            try:
+                from flask_migrate import upgrade
+                logger.info("Applying database migrations")
+                upgrade(directory=migrations_dir)
+            except Exception as e:
+                logger.error("Migration upgrade failed", error=str(e))
                 raise
 
     # Register API blueprints

@@ -31,12 +31,11 @@ def check_and_create_database(app):
         exists = cursor.fetchone()
 
         if not exists:
-            logger.info(f"Database {db_name} does not exist. Creating...")
-            # Create database
+            logger.info("Database does not exist", db_name=db_name, action="creating")
             cursor.execute(f"CREATE DATABASE {db_name}")
-            logger.info(f"Database {db_name} created successfully")
+            logger.info("Database created", db_name=db_name)
         else:
-            logger.info(f"Database {db_name} already exists")
+            logger.info("Database exists", db_name=db_name)
 
         cursor.close()
         conn.close()

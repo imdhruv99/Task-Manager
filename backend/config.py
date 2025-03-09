@@ -39,7 +39,7 @@ class TestingConfig(Config):
 class ProductionConfig(Config):
     """Production configuration."""
     DEBUG = False
-    AUTO_MIGRATE = False
+    AUTO_MIGRATE = True
     # Use a strong secret key in production
     SECRET_KEY = os.getenv('SECRET_KEY')
 
