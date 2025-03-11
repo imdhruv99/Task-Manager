@@ -105,5 +105,3 @@ venv.bak/
 
 .vscode/
 settings.json
-
-migrations/

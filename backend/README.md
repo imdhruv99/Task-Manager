@@ -24,27 +24,31 @@
 -   Create `.env` file as given below in the backend folder.
 
     ```
-    # Application
-    APP_ENV=development
-    APP_PORT=5000
+        # Database configuration
+        POSTGRES_USER=taskapp
+        POSTGRES_PASSWORD=taskpassword
+        POSTGRES_DB=taskmanagement
+        POSTGRES_HOST=localhost
+        POSTGRES_PORT=5432
 
-    # PostgreSQL
-    POSTGRES_USER=taskapp
-    POSTGRES_PASSWORD=taskapp_password
-    POSTGRES_DB=taskmanagement
-    POSTGRES_HOST=localhost
-    POSTGRES_PORT=5432
+        # Redis configuration
+        REDIS_HOST=localhost
+        REDIS_PORT=6379
 
-    # Redis
-    REDIS_HOST=localhost
-    REDIS_PORT=6379
-    REDIS_PASSWORD=redis_password
+        # Backend configuration
+        FLASK_APP=app.py
+        FLASK_ENV=development
+        FLASK_DEBUG=1
+        BACKEND_PORT=5000
     ```
 
--   Once done run below command from the backend directory
+-   Once done run below command from the backend directory.
+
     ```
-    python run.py
+    python wsgi.py
     ```
+
+-   Postman collection available so you can export it and execute the apis.
 
 ### Create docker image for kubernetes based deployment
 

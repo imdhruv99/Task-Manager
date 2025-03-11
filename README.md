@@ -9,23 +9,24 @@
     ```
     ### ENV FILE FOR DOCKER COMPOSE ###
 
-    # Application
-    APP_ENV=development
-    APP_PORT=5000
-
-    # PostgreSQL
+    # Database configuration
     POSTGRES_USER=taskapp
-    POSTGRES_PASSWORD=taskapp_password
+    POSTGRES_PASSWORD=taskpassword
     POSTGRES_DB=taskmanagement
-    POSTGRES_HOST=postgres # this will be localhost in backend directory, here it's service name of docker since we want to run app as container
+    POSTGRES_HOST=postgres
     POSTGRES_PORT=5432
 
-    # Redis
-    REDIS_HOST=redis # this will be localhost in backend directory, here it's service name of docker since we want to run app as container
+    # Redis configuration
+    REDIS_HOST=redis
     REDIS_PORT=6379
-    REDIS_PASSWORD=redis_password
 
-    # Frontend
+    # Backend configuration
+    FLASK_APP=app.py
+    FLASK_ENV=development
+    FLASK_DEBUG=1
+    BACKEND_PORT=5000
+
+    # Frontend configuration
     VITE_API_URL=http://localhost:5000/api
     ```
 
@@ -42,4 +43,53 @@
 
     ```
     docker run -it -d --name tm-backend -p 5000:5000 --env-file .env --network task-management_app-network <your-account-name>/task-management-backend:1.0.0
+    ```
+
+    OR, you can add below block of code in compose and run it again with `docker compose up -d`
+
+    ```
+      # Backend Service
+        backend:
+            build:
+            context: ./backend
+            dockerfile: Dockerfile
+            container_name: task_backend
+            restart: always
+            ports:
+            - "${BACKEND_PORT}:5000"
+            environment:
+            - FLASK_APP=${FLASK_APP}
+            - FLASK_ENV=${FLASK_ENV}
+            - FLASK_DEBUG=${FLASK_DEBUG}
+            - POSTGRES_USER=${POSTGRES_USER}
+            - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+            - POSTGRES_DB=${POSTGRES_DB}
+            - POSTGRES_HOST=${POSTGRES_HOST}
+            - POSTGRES_PORT=${POSTGRES_PORT}
+            - REDIS_HOST=${REDIS_HOST}
+            - REDIS_PORT=${REDIS_PORT}
+            depends_on:
+            postgres:
+                condition: service_healthy
+            redis:
+                condition: service_healthy
+            volumes:
+            - ./backend:/app
+
+        # Frontend Service
+        frontend:
+            build:
+            context: ./frontend
+            dockerfile: Dockerfile
+            container_name: task_frontend
+            restart: always
+            ports:
+            - "3000:3000"
+            environment:
+            - VITE_API_URL=${VITE_API_URL}
+            depends_on:
+            - backend
+            volumes:
+            - ./frontend:/app
+            - /app/node_modules
     ```

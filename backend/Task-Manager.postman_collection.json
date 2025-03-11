@@ -1,0 +1,152 @@
+{
+	"info": {
+		"_postman_id": "bedde2cf-925b-4a93-bddb-0e4178b5cb5a",
+		"name": "Task-Manager",
+		"description": "This Postman collection is designed to interact with the **Task Manager API**, which is built using Flask. The API allows users to manage tasks, including creating, updating, retrieving, and deleting tasks. The API also supports caching for optimized retrieval of tasks.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9742201"
+	},
+	"item": [
+		{
+			"name": "Create Task",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n            \"title\": \"Demo Task\",\n            \"description\": \"This is a Demo task description.\",\n            \"status\": \"in_progress\",\n            \"priority\": \"medium\",\n            \"due_date\": \"2025-03-20T00:00:00\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/v1/tasks",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"v1",
+						"tasks"
+					]
+				},
+				"description": "Create a new task. You need to provide the task data in JSON format"
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Tasks",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/v1/tasks",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"v1",
+						"tasks"
+					]
+				},
+				"description": "Fetch All Tasks."
+			},
+			"response": []
+		},
+		{
+			"name": "Get Task By ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/v1/tasks/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"v1",
+						"tasks",
+						"1"
+					]
+				},
+				"description": "Fetch a single task by ID."
+			},
+			"response": []
+		},
+		{
+			"name": "Update Task By ID",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n            \"title\": \"Updated Task Title\",\n            \"description\": \"Updated task description.\",\n            \"status\": \"in_progress\",\n            \"priority\": \"high\",\n            \"due_date\": \"2025-03-25T00:00:00\"\n         }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/v1/tasks/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"v1",
+						"tasks",
+						"2"
+					]
+				},
+				"description": "Update an existing task. You can either use PUT (to replace the task) or PATCH (to partially update the task)."
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Task By ID",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/v1/tasks/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"v1",
+						"tasks",
+						"2"
+					]
+				},
+				"description": "Delete a task by its ID."
+			},
+			"response": []
+		}
+	]
+}
