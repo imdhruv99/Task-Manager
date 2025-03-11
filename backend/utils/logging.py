@@ -3,15 +3,35 @@ import sys
 import structlog
 from flask import request, g
 import time
+import os
+from datetime import datetime
 
 def configure_logging(app):
     """Configure logging for the application."""
+
+    # Ensure log directory exists
+    log_dir = os.path.join(os.path.dirname(__file__), '..', 'logs')
+    os.makedirs(log_dir, exist_ok=True)
+
+    # Get the current date in ISO format for the log file name (e.g., 2025-03-11)
+    log_filename = datetime.now().strftime('%Y-%m-%d') + '.log'
+    log_file = os.path.join(log_dir, log_filename)
+
     # Configure standard logging
     logging.basicConfig(
         format="%(message)s",
         stream=sys.stdout,
         level=logging.INFO,
     )
+
+    # Configure file handler for logging
+    file_handler = logging.FileHandler(log_file)
+    file_handler.setLevel(logging.INFO)
+    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+    file_handler.setFormatter(formatter)
+
+    # Add file handler to the root logger
+    logging.getLogger().addHandler(file_handler)
 
     # Configure structlog
     structlog.configure(
