@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Task priority indicators */
+.priority-high {
+  @apply border-l-4 border-red-500;
+}
+
+.priority-medium {
+  @apply border-l-4 border-yellow-500;
+}
+
+.priority-low {
+  @apply border-l-4 border-green-500;
+}
+
+/* Task status badges */
+.status-todo {
+  @apply bg-gray-100 text-gray-800;
+}
+
+.status-in_progress {
+  @apply bg-blue-100 text-blue-800;
+}
+
+.status-done {
+  @apply bg-green-100 text-green-800;
+}
+
+/* Transition effects */
+.task-card {
+  @apply transition-all duration-200;
+}
+
+.task-card:hover {
+  @apply shadow-md transform -translate-y-1;
+}
