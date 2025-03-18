@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: frontend-config
+    namespace: task-manager
+data:
+    VITE_API_URL: "/api/v1"
