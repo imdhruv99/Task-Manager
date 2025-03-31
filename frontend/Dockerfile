@@ -2,7 +2,7 @@ FROM node:18-alpine AS builder
 
 WORKDIR /app
 
-ENV PATH /app/node_modules/.bin:$PATH
+ENV PATH=/app/node_modules/.bin:$PATH
 
 COPY package.json package-lock.json* ./
 RUN npm ci
