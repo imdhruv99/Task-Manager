@@ -38,11 +38,11 @@
 -   You can also run backend and frontend as container with the help of below command, pass root `.env` which you created for docker compose. since you are running application in docker make sure it's in same network as postgre and redis.
 
     ```
-    docker run -it -d --name tm-frontend -p 80:80 --env-file .env --network task-management_app-network <your-account-name>/task-management-frontend:1.0.0
+    docker run -it -d --name tm-frontend -p 80:80 --env-file .env --network task-management_app-network <your-account-name>/task-manager-frontend:1.0.0
     ```
 
     ```
-    docker run -it -d --name tm-backend -p 5000:5000 --env-file .env --network task-management_app-network <your-account-name>/task-management-backend:1.0.0
+    docker run -it -d --name tm-backend -p 5000:5000 --env-file .env --network task-management_app-network <your-account-name>/task-manager-backend:1.0.0
     ```
 
     OR, you can add below block of code in compose and run it again with `docker compose up -d`
