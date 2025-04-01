@@ -15,18 +15,18 @@
 ### Prerequisites
 
 -   Create Virtual Environment
-    ```
+    ```bash
     python -m venv venv
     ```
 -   Enable the virtual environment
-    ```
+    ```bash
     source venv/bin/activate # for Unix
     ```
-    ```
+    ```bash
     source venv/Scripts/activate # for windows
     ```
 -   Install required libraries
-    ```
+    ```bash
     python -m requirements.txt
     ```
 
@@ -35,7 +35,7 @@
 -   Make sure you have postgre and redis database running, either as docker container or locally configured.
 -   Create `.env` file as given below in the backend folder.
 
-    ```
+    ```bash
         # Database configuration
         POSTGRES_USER=taskapp
         POSTGRES_PASSWORD=taskpassword
@@ -56,19 +56,19 @@
 
 -   Once done run below command from the backend directory.
 
-    ```
+    ```bash
     python wsgi.py
     ```
 
 -   Postman collection available so you can export it and execute the apis.
 
-### Create docker image for kubernetes based deployment
+### Create Docker Image
 
 -   Build the docker image
-    ```
-        docker build -t  <your-account-name>/task-management-backend:1.0.0 ./backend
+    ```bash
+    docker build -t  <your-account-name>/task-management-backend:1.0.0 ./backend
     ```
 -   Push docker image to remote repository
-    ```
+    ```bash
     docker push <your-account-name>/task-management-backend:1.0.0
     ```
