@@ -1,4 +1,4 @@
-# Deploying with Chart
+# Deploying with Helm Chart
 
 This documentation covers the end-to-end setup and management of the **Task Manager** project using Helm. The project is composed of several components like **Backend (Flask)**, **Frontend (React + Vite)**, **Redis**, **PostgreSQL**, and **NGINX Ingress Controller**. Helm is used for deploying and managing these components in a Kubernetes cluster.
 
@@ -89,3 +89,7 @@ The Helm chart templates and values files manage the Kubernetes resources (e.g.,
     helm uninstall task-manager-dev
     ```
 - This command will delete all resources associated with the Helm release from the Kubernetes cluster.
+
+
+## Future Improvements
+- In future updates, I plan to enhance the security of the application by following best practices. This will include implementing `NetworkPolicies`, `ServiceAccounts`, `RBAC`, as well as adding robust `Logging` and `Monitoring` features, along with any other necessary components for a production-grade application.
