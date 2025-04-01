@@ -1,5 +1,17 @@
 # Task Manager Backend
 
+- Flask based REST API for Task Manager
+
+### Tools and Technology
+
+| Index  | Tech Name   |
+|---|---|
+| Programming Language  | Python  |
+| Web Framework | Flask |
+| Database | PostgreSQL |
+| Caching | Redis |
+| ORM | SQLAlchemy, Marshmallow, Flask-SQLAlchemy |
+
 ### Prerequisites
 
 -   Create Virtual Environment
