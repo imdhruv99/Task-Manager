@@ -1,0 +1,106 @@
+# Namespace Configs
+nsName: task-manager-helm
+
+# Redis Configs
+redis:
+  masterHost: redis-0.redis
+  masterPort: 6379
+  replicas: 2
+  initImage: redis:7-alpine
+  image: redis:7-alpine
+  imagePullPolicy: IfNotPresent
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+    limits:
+      cpu: "300m"
+      memory: "512Mi"
+  storage: 1Gi
+
+# Postgres Configs
+postgres:
+  dbName: taskmanager
+  user: taskapp
+  password: taskpassword
+  replicas: 1
+  initContainerImage: busybox:1.35.0-uclibc
+  image: postgres:14-alpine
+  imagePullPolicy: IfNotPresent
+  resources:
+    requests:
+      cpu: "200m"
+      memory: "256Mi"
+    limits:
+      cpu: "1000m"
+      memory: "1Gi"
+  storage: 1Gi
+
+# Backend Configs
+backend:
+  flaskApp: "app.py"
+  flaskEnv: "production"
+  flaskDebug: "0"
+  port: 5000
+  postgresHost: "postgres"
+  postgresPort: "5432"
+  postgresDb: "taskmanager"
+  redisHost: "redis"
+  redisPort: "6379"
+  pythonPath: "/opt/venv/lib/python3.11/site-packages"
+  replicas: 2
+  image: imdhruv99/task-manager-backend:1.0.0
+  imagePullPolicy: IfNotPresent
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+    limits:
+      cpu: "500m"
+      memory: "512Mi"
+  postgresUser: taskapp
+  postgresPassword: taskpassword
+
+# Frontend Configs
+frontend:
+  viteApiUrl: "/api/v1"
+  replicas: 2
+  initImage: imdhruv99/task-manager-frontend:1.0.0
+  image: imdhruv99/task-manager-frontend:1.0.0
+  imagePullPolicy: IfNotPresent
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+    limits:
+      cpu: "300m"
+      memory: "256Mi"
+
+# Ingress Controller Configs
+ingress-nginx:
+  controller:
+    replicaCount: 2
+    ingressClass: "nginx"
+    watchNamespace: ""
+    ingressClassResource:
+      enabled: false
+    service:
+      type: NodePort
+
+# Ingress Resource Configs
+ingressResourceName: task-manager-ingress-helm
+ingressClassName: nginx
+useRegex: true
+
+backendServiceName: backend
+backendServicePort: 5000
+frontendServiceName: frontend
+frontendServicePort: 80
+
+paths:
+  backend:
+    path: /api/v1/(.*)
+    pathType: Prefix
+  frontend:
+    path: /(.*)
+    pathType: Prefix

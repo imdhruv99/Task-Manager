@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  namespace: {{ .Values.nsName }}
+  labels:
+    app: backend
+spec:
+  selector:
+    app: backend
+  ports:
+    - port: {{ .Values.backend.port | default 5000 }}
+      targetPort: {{ .Values.backend.port | default 5000 }}
+      name: http
+  type: ClusterIP

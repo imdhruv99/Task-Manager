@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+  namespace: {{ .Values.nsName }}
+data:
+  FLASK_APP: "{{ .Values.backend.flaskApp }}"
+  FLASK_ENV: "{{ .Values.backend.flaskEnv }}"
+  FLASK_DEBUG: "{{ .Values.backend.flaskDebug }}"
+  BACKEND_PORT: "{{ .Values.backend.port }}"
+  POSTGRES_HOST: "{{ .Values.backend.postgresHost }}"
+  POSTGRES_PORT: "{{ .Values.backend.postgresPort }}"
+  POSTGRES_DB: "{{ .Values.backend.postgresDb }}"
+  REDIS_HOST: "{{ .Values.backend.redisHost }}"
+  REDIS_PORT: "{{ .Values.backend.redisPort }}"
+  PYTHONPATH: "{{ .Values.backend.pythonPath }}"

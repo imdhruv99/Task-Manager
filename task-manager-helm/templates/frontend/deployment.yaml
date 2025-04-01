@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: {{ .Values.nsName }}
+  labels:
+    app: frontend
+spec:
+  replicas: {{ .Values.frontend.replicas | default 2 }}
+  selector:
+    matchLabels:
+      app: frontend
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      initContainers:
+        - name: copy-html
+          image: {{ .Values.frontend.initImage | default "imdhruv99/task-manager-frontend:1.0.0" }}
+          command:
+            ["sh", "-c", "cp -r /usr/share/nginx/html/. /mnt/html/"]
+          volumeMounts:
+            - name: html-volume
+              mountPath: /mnt/html
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsUser: 1001
+            runAsGroup: 1001
+            capabilities:
+              drop: ["ALL"]
+            readOnlyRootFilesystem: true
+      containers:
+        - name: frontend
+          image: {{ .Values.frontend.image | default "imdhruv99/task-manager-frontend:1.0.0" }}
+          imagePullPolicy: {{ .Values.frontend.imagePullPolicy | default "IfNotPresent" }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsUser: 1001
+            runAsGroup: 1001
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+          ports:
+            - containerPort: 80
+              name: http
+          resources:
+            requests:
+              cpu: {{ .Values.frontend.resources.requests.cpu | default "100m" }}
+              memory: {{ .Values.frontend.resources.requests.memory | default "128Mi" }}
+            limits:
+              cpu: {{ .Values.frontend.resources.limits.cpu | default "300m" }}
+              memory: {{ .Values.frontend.resources.limits.memory | default "256Mi" }}
+          envFrom:
+            - configMapRef:
+                name: frontend-config
+          volumeMounts:
+            - name: nginx-cache
+              mountPath: /var/cache/nginx
+            - name: nginx-run
+              mountPath: /var/run
+            - name: html-volume
+              mountPath: /usr/share/nginx/html
+      volumes:
+        - name: nginx-cache
+          emptyDir: {}
+        - name: nginx-run
+          emptyDir: {}
+        - name: html-volume
+          emptyDir: {}
