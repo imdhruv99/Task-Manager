@@ -91,7 +91,7 @@
             container_name: task_frontend
             restart: always
             ports:
-            - "3000:3000"
+            - "3000:80"
             environment:
             - VITE_API_URL=${VITE_API_URL}
             depends_on:
