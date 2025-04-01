@@ -52,7 +52,7 @@
 
 ### Docker Compose based Application Deployment
 
--  Append below blocks `docker-compose.yaml`.
+-  Append below blocks in `docker-compose.yaml`.
 
     ```yaml
       # Backend Service
