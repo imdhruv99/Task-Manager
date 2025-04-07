@@ -39,9 +39,19 @@ The Helm chart templates and values files manage the Kubernetes resources (e.g.,
     ```bash
     cd task-manager-helm
     ```
+
+    Update the dependency
+
+    ```bash
+    helm dependency update
+    ```
+
+    and then package the chart
+
     ```bash
     helm package .
     ```
+
     Output should looks like below...
     ```bash
     Successfully packaged chart and saved it to: <PATH of tgz file>
