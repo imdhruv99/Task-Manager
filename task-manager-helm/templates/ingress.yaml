@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ .Values.ingressResourceName | required "ingressResourceName is required" }}
-  namespace: {{ .Values.nsName | default "default" }}
+  namespace: {{ .Values.nsName }}
   annotations:
     nginx.ingress.kubernetes.io/use-regex: {{ .Values.useRegex | default "true" | quote }}
 spec:

@@ -68,11 +68,11 @@ The Helm chart templates and values files manage the Kubernetes resources (e.g.,
 4. Execute below command to create resources in your kubernetes cluster
 
     ```bash
-    helm install task-manager-dev ./task-manager-helm -f task-manager-helm/values-development.yaml
+    helm install task-manager-dev task-manager-helm -f task-manager-helm/values-development.yaml --namespace task-manager-helm --create-namespace
     ```
     > You can add `--debug` to log the installation process in STDIO, but it is not mandatory
     ```bash
-    helm install task-manager-dev ./task-manager-helm -f task-manager-helm/values-development.yaml --debug
+    helm install task-manager-dev task-manager-helm -f task-manager-helm/values-development.yaml --namespace task-manager-helm --create-namespace --debug
     ```
 
 5. To verify that your Helm deployment was successful, use the following kubectl commands to check the status of your deployments:
@@ -96,10 +96,13 @@ The Helm chart templates and values files manage the Kubernetes resources (e.g.,
 
 - To uninstall the Helm release and remove the resources, use the following command:
     ```bash
-    helm uninstall task-manager-dev
+    helm uninstall task-manager-dev --namespace task-manager-helm
     ```
 - This command will delete all resources associated with the Helm release from the Kubernetes cluster.
 
+---
+**Note:** Helm does not automatically create namespaces, and it is not recommended to manage namespace creation through Helm templates.
+https://github.com/helm/helm/issues/4456#issuecomment-412134651
 
 ## Future Improvements
 - In future updates, I plan to enhance the security of the application by following best practices. This will include implementing `NetworkPolicies`, `ServiceAccounts`, `RBAC`, as well as adding robust `Logging` and `Monitoring` features, along with any other necessary components for a production-grade application.
