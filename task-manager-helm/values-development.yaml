@@ -76,17 +76,6 @@ frontend:
       cpu: "300m"
       memory: "256Mi"
 
-# Ingress Controller Configs
-ingress-nginx:
-  controller:
-    replicaCount: 2
-    ingressClass: "nginx"
-    watchNamespace: ""
-    ingressClassResource:
-      enabled: false
-    service:
-      type: NodePort
-
 # Ingress Resource Configs
 ingressResourceName: task-manager-ingress-helm
 ingressClassName: nginx
@@ -100,7 +89,7 @@ frontendServicePort: 80
 paths:
   backend:
     path: /api/v1/(.*)
-    pathType: Prefix
+    pathType: ImplementationSpecific
   frontend:
     path: /(.*)
-    pathType: Prefix
+    pathType: ImplementationSpecific

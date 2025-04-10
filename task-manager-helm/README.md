@@ -32,9 +32,21 @@ The Helm chart templates and values files manage the Kubernetes resources (e.g.,
 
 ## Installation Steps
 
-1. I have provided the demo values files, you can update everything inside those files according to your need, I have kept everything minimal.
+1. Install NGINX Ingress Controller (Cluster-Scoped)
+Deploy the ingress controller in a dedicated namespace (`ingress-nginx`). This is a **one-time setup** for your cluster.
 
-2. Once you are done with creating values file, you can package the helm chart with below command
+    ```bash
+    # Add the ingress-nginx Helm repository
+    helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+    ```
+    ```bash
+    # Install the ingress controller with NodePort (for local clusters)
+    helm install ingress-nginx ingress-nginx/ingress-nginx --namespace ingress-nginx --create-namespace --set controller.service.type=NodePort
+
+    # For cloud providers (AWS/GCP/Azure), use LoadBalancer instead: --set controller.service.type=LoadBalancer (default is this so no need to change)
+    ```
+
+2. Then update values.yaml files according to your need, after that you can package the helm chart with below command
 
     ```bash
     cd task-manager-helm
@@ -83,12 +95,24 @@ The Helm chart templates and values files manage the Kubernetes resources (e.g.,
     kubectl get ingress -n task-manager-helm
     ```
 
+6. Accessing the application
+    ```bash
+    kubectl get svc -n ingress-nginx
+    ```
+    this will give output similar to below
+    ```
+    NAME                                 TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                      AGE
+    ingress-nginx-controller             NodePort    10.107.125.98   <none>        80:31464/TCP,443:30291/TCP   23m
+    ingress-nginx-controller-admission   ClusterIP   10.106.57.224   <none>        443/TCP                      23m
+    ```
+    Take port from `ingress-nginx-controller`, in above case it's `31464` and access `http://localhost:31464` and you should be able to access the application.
+
 ## Updating the Deployment
 
 - To update your Helm deployment, modify the values.yaml file as required and use the helm upgrade command to apply the changes:
 
     ```bash
-    helm upgrade task-manager-dev ./task-manager-helm -f task-manager-helm/values-development.yaml
+    helm upgrade task-manager-dev ./task-manager-helm -f task-manager-helm/values-development.yaml --namespace task-manager-helm --create-namespace --debug
     ```
     This command will update the resources in your cluster based on the changes you made to the `values.yaml` file.
 
